@@ -1,0 +1,4 @@
+# Error between image center and target
+
+float errx
+float erry

@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(precision_land)
+
+
+
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  image_transport
+  cv_bridge
+  std_msgs
+  message_generation
+)
+
+find_package(OpenCV REQUIRED)
+
+
+include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} 
+)
+
+
+add_message_files(FILES
+   PosError.msg
+)
+
+
+
+generate_messages(DEPENDENCIES
+   std_msgs
+)
+
+
+catkin_package(
+   CATKIN_DEPENDS 
+	roscpp
+	image_transport
+	cv_bridge
+	std_msgs
+	message_runtime
+)
+
+
+add_executable(calculate_pose_error src/vector_publisher.cpp)
+target_link_libraries(calculate_pose_error ${catkin_LIBRARIES} ${OpenCV_LIBS} ${OpenCV_LIBRARIES})
+add_dependencies(calculate_pose_error ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(calculate_rpy src/mav_controller.cpp)
+target_link_libraries(calculate_rpy ${catkin_LIBRARIES})
+add_dependencies(calculate_rpy ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+
+
